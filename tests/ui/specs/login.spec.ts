@@ -28,6 +28,7 @@ test.describe('Login', async () => {
 
   test('Login locked account', async ({ page }) => {
     await loginPage.login(lockedUser,pass)
+    await loginPage.validateLockedCredentials()
   });
 
 });

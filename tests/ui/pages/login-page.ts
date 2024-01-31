@@ -1,11 +1,14 @@
 import { type Page, type Locator , expect } from '@playwright/test';
+import message from '../../utils/messages'
 
 class LoginPage {
 
     readonly page: Page;
+    readonly messagePanel : Locator
 
     constructor(page: Page) {
         this.page = page
+        this.messagePanel = page.getByRole('heading', {name: 'error'})
     }
     
     async login(username: string ,password: string) {
@@ -18,6 +21,10 @@ class LoginPage {
         await expect(this.page).toHaveURL(pageUrl);
         await expect(this.page).toHaveTitle(/Swag Labs/);
       }
+
+    async validateLockedCredentials() {
+        await expect(this.page.getByText(message.locked_user.error)).toBeVisible();
+    }
 }
 
 export default LoginPage;
