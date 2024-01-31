@@ -1,0 +1,17 @@
+{
+  "name": "td-ui-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:login": "npx playwright test tests/ui/specs/login.spec.ts --project=chromium --headed --retries=0 --reporter=list"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.41.1",
+    "@types/node": "^20.11.10",
+    "dotenv": "^16.1.4"
+  }
+}
