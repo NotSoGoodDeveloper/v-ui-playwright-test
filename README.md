@@ -1,1 +1,1 @@
-# v-ui-test
+# practicing typescript in playwright framework
