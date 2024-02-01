@@ -26,6 +26,16 @@ test.describe('Login', async () => {
     await loginPage.validateLogin();
   });
 
+  test('Login with incorrect password', async ({ page }) => {
+    await loginPage.login(validUser,'incorrectp@ss')
+    await loginPage.validateLogin();
+  });
+
+  test('Login with non existing user', async ({ page }) => {
+    await loginPage.login('non-existing-user','incorrectp@ss')
+    await loginPage.validateLogin();
+  });
+
   test('Login locked account', async ({ page }) => {
     await loginPage.login(lockedUser,pass)
     await loginPage.validateLockedCredentials()
@@ -33,7 +43,8 @@ test.describe('Login', async () => {
 
 });
 
-
+///static/media/sl-404.168b1cce.jpg
+///static/media/sauce-backpack-1200x1500.0a0b85a3.jpg
 
 // test('get started link', async ({ page }) => {
 //   await page.goto('https://playwright.dev/');

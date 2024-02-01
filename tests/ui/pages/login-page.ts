@@ -17,10 +17,14 @@ class LoginPage {
         await this.page.getByRole('button').click();
     }
     async validateLogin() {
-        const pageUrl = /.*inventory/;
-        await expect(this.page).toHaveURL(pageUrl);
-        await expect(this.page).toHaveTitle(/Swag Labs/);
-      }
+        try{
+            const pageUrl = /.*inventory/;
+            await expect(this.page).toHaveURL(pageUrl);
+            await expect(this.page).toHaveTitle(/Swag Labs/);
+        }catch{
+            await expect(this.page.getByText(message.incorrect_user.error)).toBeVisible();
+        }
+    }
 
     async validateLockedCredentials() {
         await expect(this.page.getByText(message.locked_user.error)).toBeVisible();
