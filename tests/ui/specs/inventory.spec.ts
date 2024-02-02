@@ -20,7 +20,7 @@ test.beforeEach(async({page}) => {
 })
 
 test.describe('Inventory', async() => {
-  test.only('Sort Inventory list', async() =>{
+  test('Sort Inventory list', async() =>{
     let sortOption = ['hilo', 'lohi','za', 'az']
     for(let sort of sortOption){
       await inventoryPage.selectSortOption(sort)
@@ -29,6 +29,14 @@ test.describe('Inventory', async() => {
 
   test('Add to cart', async() => {
     await inventoryPage.addToCart() 
-    await inventoryPage.validateCartBadge()
+    await inventoryPage.validateCartBadge(true)
+  })
+
+  test('Remove to cart', async() => {
+    await inventoryPage.addToCart() 
+    await inventoryPage.validateCartBadge(true)
+    await inventoryPage.removeToCart()
+    await inventoryPage.validateCartBadge(false)
+
   })
 })
