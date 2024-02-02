@@ -43,8 +43,6 @@ test.describe('Login', async () => {
 
 });
 
-///static/media/sl-404.168b1cce.jpg
-///static/media/sauce-backpack-1200x1500.0a0b85a3.jpg
 
 // test('get started link', async ({ page }) => {
 //   await page.goto('https://playwright.dev/');
