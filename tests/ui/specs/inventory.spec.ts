@@ -36,4 +36,18 @@ test.describe('Inventory', async() => {
     await inventoryPage.validateCartBadge(false)
 
   })
+
+  test('Select item then add and remove to cart', async()=>{
+    await inventoryPage.selectItem()
+    await inventoryPage.validateInventoryUrl(false)
+    await inventoryPage.addToCart() 
+    await inventoryPage.validateCartBadge(true)
+    await inventoryPage.removeToCart()
+    await inventoryPage.validateCartBadge(false)
+    await inventoryPage.backToProducts()
+    await inventoryPage.validateInventoryUrl(true)
+
+  })
+
+
 })
