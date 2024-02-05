@@ -1,19 +1,15 @@
 import { test, expect } from '@playwright/test';
 import LoginPage  from '../pages/login-page';
 
-require('dotenv').config();
-
-const URL = process.env.URL as string;
-const validUser = process.env.VALID_USER as string
-const lockedUser = process.env.LOCKED_USER as string
-const pass = process.env.PASSWORD as string;
+const { ENV } = require("../../utils/setup/env");
+const envUtil = new ENV();
 
 let loginPage: LoginPage;
 
 
 test.beforeEach(async ({ page }) => {
   loginPage = new LoginPage(page);
-  await page.goto(URL);
+  await page.goto(envUtil.getUrl());
 });
 
 test.describe('Login', async () => {
@@ -21,23 +17,23 @@ test.describe('Login', async () => {
     await expect(page).toHaveTitle(/Swag Labs/);
   });
   
-  test('Login valid account', async ({ page }) => {
-    await loginPage.login(validUser,pass)
+  test('Login valid account', async () => {
+    await loginPage.login(envUtil.getValidUser(),envUtil.getPass())
     await loginPage.validateLogin();
   });
 
-  test('Login with incorrect password', async ({ page }) => {
-    await loginPage.login(validUser,'incorrectp@ss')
+  test('Login with incorrect password', async () => {
+    await loginPage.login(envUtil.getValidUser(),'incorrectp@ss')
     await loginPage.validateLogin();
   });
 
-  test('Login with non existing user', async ({ page }) => {
+  test('Login with non existing user', async () => {
     await loginPage.login('non-existing-user','incorrectp@ss')
     await loginPage.validateLogin();
   });
 
-  test('Login locked account', async ({ page }) => {
-    await loginPage.login(lockedUser,pass)
+  test('Login locked account', async () => {
+    await loginPage.login(envUtil.getLockedUser(),envUtil.getPass())
     await loginPage.validateLockedCredentials()
   });
 

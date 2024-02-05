@@ -1,5 +1,5 @@
 import { type Page, type Locator , expect } from '@playwright/test';
-import message from '../../utils/messages'
+import message from '../../utils/common/messages'
 
 class LoginPage {
 
