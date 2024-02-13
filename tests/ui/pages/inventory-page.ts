@@ -1,4 +1,5 @@
 import { type Page, type Locator , expect } from '@playwright/test';
+import { faker } from '@faker-js/faker';
 
 class InventoryPage {
 
@@ -9,6 +10,12 @@ class InventoryPage {
     readonly removeToCartBtn: Locator;
     readonly selectItemLink: Locator;
     readonly backToProductsLink: Locator;
+    readonly cartIcon: Locator;
+    readonly checkoutBtn: Locator;
+    readonly firstName: Locator;
+    readonly lastName: Locator;
+    readonly pcode: Locator
+    readonly continueCheckoutBtn: Locator;
 
     constructor(page: Page) {
         this.page = page
@@ -18,6 +25,12 @@ class InventoryPage {
         this.removeToCartBtn = page.locator('#remove-sauce-labs-backpack')
         this.selectItemLink = page.locator('#item_4_title_link')
         this.backToProductsLink = page.locator('#back-to-products')
+        this.cartIcon = page.locator('#shopping_cart_container')
+        this.checkoutBtn = page.locator('#checkout')
+        this.firstName = page.locator('#first-name')
+        this.lastName = page.locator('#last-name')
+        this.pcode = page.locator('#postal-code')
+        this.continueCheckoutBtn = page.locator('#continue')
     }
     
     async selectSortOption(sortOption: string) {
@@ -55,15 +68,46 @@ class InventoryPage {
 
     }
 
-    async validateInventoryUrl(selection: boolean){
-        if(selection){
+    async validateURL(url: string){
+        var pageUrl: RegExp = /.*saucedemo/
+        if(url == 'inventory'){
             var pageUrl = /.*inventory/;
-        }else{
+        }else if(url == 'inventory-item'){
             var pageUrl = /.*inventory-item/;
+        }else if(url == 'checkout-step-one'){
+            var pageUrl = /.*checkout-step-one/;
+        }else if(url == 'checkout-step-two'){
+            var pageUrl = /.*checkout-step-two/;
         }
 
         await expect(this.page).toHaveURL(pageUrl);
 
+    }
+
+    async clickCartIcon(){
+        await this.cartIcon.click()
+        await this.page.waitForTimeout(1000)
+    }
+
+    async clickCheckoutBtn(){
+        await this.checkoutBtn.click()
+        await this.page.waitForTimeout(1000)
+    }
+
+    async fillCheckoutInfo(){
+        const firstName = faker.person.firstName()
+        const lastName = faker.person.lastName()
+        const address = faker.location.streetAddress()
+        
+        await this.firstName.fill(firstName)
+        await this.lastName.fill(lastName)
+        await this.pcode.fill(address)
+        await this.page.waitForTimeout(3000)
+    }
+
+    async clickContinueCheckoutBtn() {
+        await this.continueCheckoutBtn.click()
+        await this.page.waitForTimeout(3000)
     }
 }
 

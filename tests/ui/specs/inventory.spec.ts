@@ -39,14 +39,25 @@ test.describe('Inventory', async() => {
 
   test('Select item then add and remove to cart', async()=>{
     await inventoryPage.selectItem()
-    await inventoryPage.validateInventoryUrl(false)
+    await inventoryPage.validateURL('inventory-item')
     await inventoryPage.addToCart() 
     await inventoryPage.validateCartBadge(true)
     await inventoryPage.removeToCart()
     await inventoryPage.validateCartBadge(false)
     await inventoryPage.backToProducts()
-    await inventoryPage.validateInventoryUrl(true)
+    await inventoryPage.validateURL('inventory')
 
+  })
+
+  test('Checkout item', async()=>{
+    await inventoryPage.addToCart() 
+    await inventoryPage.validateCartBadge(true)
+    await inventoryPage.clickCartIcon()
+    await inventoryPage.clickCheckoutBtn()
+    await inventoryPage.validateURL('checkout-step-one')
+    await inventoryPage.fillCheckoutInfo()
+    await inventoryPage.clickContinueCheckoutBtn()
+    await inventoryPage.validateURL('checkout-step-two')
   })
 
 
