@@ -58,6 +58,10 @@ test.describe('Inventory', async() => {
     await inventoryPage.fillCheckoutInfo()
     await inventoryPage.clickContinueCheckoutBtn()
     await inventoryPage.validateURL('checkout-step-two')
+    await inventoryPage.clickFinishCheckoutBtn()
+    await inventoryPage.validateURL('checkout-complete')
+    await inventoryPage.validateCompletedPage();
+    await inventoryPage.validateURL('inventory')
   })
 
 

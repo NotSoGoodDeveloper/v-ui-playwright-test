@@ -16,6 +16,9 @@ class InventoryPage {
     readonly lastName: Locator;
     readonly pcode: Locator
     readonly continueCheckoutBtn: Locator;
+    readonly finishBtn: Locator;
+    readonly checkoutCompletedHeader: Locator;
+    readonly backHomeBtn: Locator
 
     constructor(page: Page) {
         this.page = page
@@ -31,6 +34,9 @@ class InventoryPage {
         this.lastName = page.locator('#last-name')
         this.pcode = page.locator('#postal-code')
         this.continueCheckoutBtn = page.locator('#continue')
+        this.finishBtn = page.locator('#finish')
+        this.checkoutCompletedHeader = page.locator('complete-header')
+        this.backHomeBtn = page.getByRole('button', { name: 'Back Home' })
     }
     
     async selectSortOption(sortOption: string) {
@@ -78,6 +84,8 @@ class InventoryPage {
             var pageUrl = /.*checkout-step-one/;
         }else if(url == 'checkout-step-two'){
             var pageUrl = /.*checkout-step-two/;
+        }else if(url == 'checkout-complete'){
+            var pageUrl = /.*checkout-complete/;
         }
 
         await expect(this.page).toHaveURL(pageUrl);
@@ -107,6 +115,18 @@ class InventoryPage {
 
     async clickContinueCheckoutBtn() {
         await this.continueCheckoutBtn.click()
+        await this.page.waitForTimeout(3000)
+    }
+
+    async clickFinishCheckoutBtn() {
+        await this.finishBtn.click()
+        await this.page.waitForTimeout(3000)
+    }
+
+    async validateCompletedPage(){
+        await expect(this.page.getByText('Thank you for your order!')).toBeVisible()
+        await expect(this.page.getByText('Your order has been dispatched, and will arrive just as fast as the pony can get there!')).toBeVisible()
+        await this.backHomeBtn.click()
         await this.page.waitForTimeout(3000)
     }
 }
