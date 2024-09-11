@@ -13,11 +13,11 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('Login', async () => {
-  test('has title', async ({ page }) => {
+  test('has title @smoke', async ({ page }) => {
     await expect(page).toHaveTitle(/Swag Labs/);
   });
   
-  test('Login valid account', async () => {
+  test('Login valid account @smoke', async () => {
     await loginPage.login(envUtil.getValidUser(),envUtil.getPass())
     await loginPage.validateLogin();
   });

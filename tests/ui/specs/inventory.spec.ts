@@ -17,19 +17,19 @@ test.beforeEach(async({page}) => {
 })
 
 test.describe('Inventory', async() => {
-  test('Sort Inventory list', async() =>{
+  test('Sort Inventory list @smoke', async() =>{
     let sortOption = ['hilo', 'lohi','za', 'az']
     for(let sort of sortOption){
       await inventoryPage.selectSortOption(sort)
     }
   })
 
-  test('Add to cart', async() => {
+  test('Add to cart @smoke', async() => {
     await inventoryPage.addToCart() 
     await inventoryPage.validateCartBadge(true)
   })
 
-  test('Remove to cart', async() => {
+  test('Remove to cart @smoke', async() => {
     await inventoryPage.addToCart() 
     await inventoryPage.validateCartBadge(true)
     await inventoryPage.removeToCart()
@@ -37,7 +37,7 @@ test.describe('Inventory', async() => {
 
   })
 
-  test('Select item then add and remove to cart', async()=>{
+  test('Select item then add and remove to cart @smoke', async()=>{
     await inventoryPage.selectItem()
     await inventoryPage.validateURL('inventory-item')
     await inventoryPage.addToCart() 
@@ -49,7 +49,7 @@ test.describe('Inventory', async() => {
 
   })
 
-  test('Checkout item', async()=>{
+  test('Checkout item @smoke', async()=>{
     await inventoryPage.addToCart() 
     await inventoryPage.validateCartBadge(true)
     await inventoryPage.clickCartIcon()

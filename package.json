@@ -6,7 +6,8 @@
   "scripts": {
     "test:login": "npx playwright test tests/ui/specs/login.spec.ts --project=chromium --headed --retries=0 --reporter=list",
     "test:inventory": "npx playwright test tests/ui/specs/inventory.spec.ts --project=chromium --headed --retries=0 --reporter=list",
-    "test:ui:regression": "npx playwright test tests/ui/specs --project=chromium --headed --retries=1 --reporter=list"
+    "test:ui:regression": "npx playwright test tests/ui/specs --project=chromium --headed --retries=1 --reporter=list",
+    "test:smoke": "npx playwright test --grep @smoke"
   },
   "keywords": [],
   "author": "",
