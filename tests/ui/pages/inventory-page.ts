@@ -28,6 +28,7 @@ class InventoryPage {
     readonly fbIcon: Locator
     readonly linkedinIcon: Locator
     readonly copyRightLabel: Locator
+    readonly productContents: Locator
 
 
     constructor(page: Page) {
@@ -50,22 +51,41 @@ class InventoryPage {
         this.kebabOption = page.locator('#react-burger-menu-btn')
         this.inventoryTitle = page.locator('.app_logo')
         this.productTitle = page.locator('span.title')
-        this.productColumn = page.locator('.inventory_list')
+        this.productColumn = page.locator('.inventory_list .inventory_item')
         this.twitterIcon = page.locator("[href*='twitter']")
         this.fbIcon = page.locator("[href*='facebook']")
         this.linkedinIcon = page.locator("[href*='linkedin']")
         this.copyRightLabel = page.locator('.footer_copy')
+        this.productContents = this.productColumn
+
     }
-    
+
+    async getProductCount(){
+        return  await this.productContents.count();
+
+    }
+        
     async selectSortOption(sortOption: string) {
         await this.sort.selectOption(sortOption);
 
     }
 
-    async addToCart(){
-        await this.addToCartBtn.click()
-        await this.page.waitForTimeout(3000)
+    async addToCart(count: number = 1){
+
+        for(let index = 0 ; index < count ;index++){
+            await this.productContents.nth(index).locator('.btn_inventory').click()
+        }
+
+        await this.page.pause()
+
     }
+
+    async chooseNumberOfProduct(){
+
+        return Math.floor(Math.random() * (await this.getProductCount() - 1 + 1) + 1);
+
+    }
+    
 
     async validateCartBadge(shouldShow: boolean){
         if(shouldShow){
@@ -164,16 +184,14 @@ class InventoryPage {
     }
 
     async verifyProductDetails(){
-        const productContents = await this.page.locator('.inventory_list .inventory_item')
-        const count = await productContents.count();
         const productArr: ProductObj[] = []
         
 
-        for(let index = 0 ; index < count ;index++){
+        for(let index = 0 ; index < await this.getProductCount() ;index++){
             let productObj: ProductObj = {
-                name: await productContents.nth(index).locator('.inventory_item_name').textContent(),
-                description: await productContents.nth(index).locator('.inventory_item_desc').textContent(),
-                price: await productContents.nth(index).locator('.inventory_item_price').textContent()
+                name: await this.productContents.nth(index).locator('.inventory_item_name').textContent(),
+                description: await this.productContents.nth(index).locator('.inventory_item_desc').textContent(),
+                price: await this.productContents.nth(index).locator('.inventory_item_price').textContent()
             }
 
             productArr.push(productObj)

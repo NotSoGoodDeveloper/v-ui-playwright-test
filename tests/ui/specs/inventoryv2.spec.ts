@@ -18,7 +18,7 @@ test.beforeEach(async({page}) => {
 
 test.describe('Inventory', async() => {
   test('The list of available products with correct details should display @smoke', async({page}) =>{
-    await test.step('Given: I am on the inventory page @smoke', async() =>{
+    await test.step('Given: I am on the inventory page', async() =>{
       await inventoryPage.validateURL('/.*inventory/');
     })
 
@@ -32,27 +32,43 @@ test.describe('Inventory', async() => {
     - twitter icon
     - facebook icon 
     - linkedin icon
-    - label for © 2024 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy @smoke` , async() =>{
+    - label for © 2024 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy` , async() =>{
       await inventoryPage.verifyInventoryPageElements()
     })
 
-    await test.step('When: I see the list of available product cards in two column layout @smoke', async() =>{
+    await test.step('When: I see the list of available product cards in two column layout', async() =>{
       expect(await inventoryPage.verifyInventoryPageElements()).toBeTruthy()
     })
 
-    await test.step('Then: I should see their <name>, <descriptions>, <images>, <prices> and Add to Cart button next to EACH product @smoke', async() =>{
+    await test.step('Then: I should see their <name>, <descriptions>, <images>, <prices> and Add to Cart button next to EACH product', async() =>{
       await inventoryPage.verifyProductDetails()
     })
   })
 
-  test('Product should be viewed @smoke', async() => {
-
-
-  })
-
   test('Product/s can be added to cart @smoke', async() => {
+    let productCount: number
+    await test.step('Given: I choose {number} of product', async() => {
+      productCount = await inventoryPage.chooseNumberOfProduct()
+    
+    })
 
+    await test.step('And: I click the Add to Cart button', async() => {
+      await inventoryPage.addToCart(productCount)
+    
+    })
+
+    await test.step('And: the button text turned to Remove from Add to cart text', async() => {
+
+    
+    })
+
+    await test.step('And: the cart icon should have a red badge with the correct number of product/s that has been added', async() => {
+
+    
+    })
+    
   })
+
 
   test('Product/s can be removed to cart @smoke', async() => {
 
