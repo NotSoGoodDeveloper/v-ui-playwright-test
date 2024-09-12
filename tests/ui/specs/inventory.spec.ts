@@ -20,7 +20,7 @@ test.describe('Inventory', async() => {
   test('Sort Inventory list @smoke', async() =>{
     let sortOption = ['hilo', 'lohi','za', 'az']
     for(let sort of sortOption){
-      await inventoryPage.selectSortOption(sort)
+      await inventoryPage.selectSortOption()
     }
   })
 

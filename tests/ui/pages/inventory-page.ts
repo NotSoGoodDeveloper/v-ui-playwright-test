@@ -31,6 +31,7 @@ class InventoryPage {
     readonly productContents: Locator
     readonly firstProduct: Locator
     readonly productContainer: Locator
+    readonly sortOptions: Locator
 
 
     constructor(page: Page) {
@@ -68,12 +69,82 @@ class InventoryPage {
         return  await this.productContents.count();
 
     }
-        
-    async selectSortOption(sortOption: string) {
-        await this.sort.selectOption(sortOption);
 
+    async clickSort(){
+        await this.sort.click()
+    }
+        
+    async getSortOption() {
+        const sortOptionCount = await this.sort.locator('option').count()
+        const sortOptionArr: string[] = []
+
+        for(let index = 0; index < sortOptionCount; index++){
+            let sortItem = await this.sort.locator('option').nth(index).textContent() as string;
+            sortOptionArr.push(sortItem)
+        }
+        
+        return [sortOptionArr, sortOptionCount]
     }
 
+    async selectSortOption(sortOption){
+        const productDetails = await this.getProductDetails();
+        await this.sort.selectOption(sortOption)
+        
+        return productDetails
+    }
+
+    async validateSortResult(sortOption, productOriginalState){
+        if(sortOption == 'Name (A to Z)'){
+            const productDetails = await this.getProductDetails();
+            const productArr = productOriginalState.sort((item1, item2) => {
+                return item1.name!.localeCompare(item2.name!);
+            });
+
+            expect(JSON.stringify(productArr)).toEqual(JSON.stringify(productDetails))
+
+        }
+
+        else if(sortOption == 'Name (Z to A)'){
+            const productDetails = await this.getProductDetails();
+            const productArr = productOriginalState.sort((item1, item2) => {
+                return item2.name!.localeCompare(item1.name!);
+            });
+
+            expect(JSON.stringify(productArr)).toEqual(JSON.stringify(productDetails))
+
+        }
+
+        else if(sortOption == 'Price (low to high)'){
+            const productDetails = await this.getProductDetails();
+            console.log("JSON.stringify(productDetails):: ",JSON.stringify(productDetails))
+            const productArr = productOriginalState.sort((item1, item2) => {
+                const price1 = parseFloat(item1.price.replace('$', ''));
+                const price2 = parseFloat(item2.price.replace('$', ''));
+
+                return price1 - price2 || item1.name!.localeCompare(item2.name!);
+            });
+
+            expect(JSON.stringify(productArr)).toEqual(JSON.stringify(productDetails))
+
+        }
+
+        else if(sortOption == 'Price (high to low)'){
+            const productDetails = await this.getProductDetails();
+            const productArr = productOriginalState.sort((item1, item2) => {
+                const price1 = parseFloat(item1.price.replace('$', ''));
+                const price2 = parseFloat(item2.price.replace('$', ''));
+
+                return price2 - price1 || item1.name!.localeCompare(item2.name!);
+            });
+
+            expect(JSON.stringify(productArr)).toEqual(JSON.stringify(productDetails))
+
+        }
+
+        else {
+            console.log('Sort option does not exist')
+        }
+    }
     async addToCart(count: number = 1){
 
         for(let index = 0 ; index < count ;index++){
@@ -184,10 +255,9 @@ class InventoryPage {
         return true
     }
 
-    async verifyProductDetails(){
+    async getProductDetails(){
         const productArr: ProductObj[] = []
         
-
         for(let index = 0 ; index < await this.getProductCount() ;index++){
             let productObj: ProductObj = {
                 name: await this.productContents.nth(index).locator('.inventory_item_name').textContent(),
@@ -198,6 +268,11 @@ class InventoryPage {
             productArr.push(productObj)
         }
 
+        return productArr
+    }
+
+    async verifyProductDetails(){
+        const productArr = await this.getProductDetails()
         expect(JSON.stringify(productArr)).toEqual(JSON.stringify(productResponse))
 
     }

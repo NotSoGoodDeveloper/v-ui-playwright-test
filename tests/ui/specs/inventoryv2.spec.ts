@@ -85,8 +85,23 @@ test.describe('Inventory', async() => {
     })
   })
 
-  test('Product list could be sorted correctly', async() => {
+  test('Product list could be sorted correctly @smoke', async() => {
+    let sortOptions
+    await test.step('Given: I click the sort dropdown ', async() => {
+      await inventoryPage.clickSort()
+    })
 
+    await test.step('And: I see sort options', async() => {
+      sortOptions = await inventoryPage.getSortOption()
+    })
+
+    for(let index = 0; index < sortOptions[1]; index++){
+      await test.step(`When: I select ${sortOptions[0][index]} sort options
+                      Then: the product list should show result based on the sort option I selected`, async() => {
+        const productOriginalState = await inventoryPage.selectSortOption(sortOptions[0][index])
+        await inventoryPage.validateSortResult(sortOptions[0][index], productOriginalState)
+      })
+    }
   })
 
 
