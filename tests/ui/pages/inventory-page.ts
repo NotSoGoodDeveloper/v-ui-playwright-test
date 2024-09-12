@@ -29,6 +29,8 @@ class InventoryPage {
     readonly linkedinIcon: Locator
     readonly copyRightLabel: Locator
     readonly productContents: Locator
+    readonly firstProduct: Locator
+    readonly productContainer: Locator
 
 
     constructor(page: Page) {
@@ -51,12 +53,14 @@ class InventoryPage {
         this.kebabOption = page.locator('#react-burger-menu-btn')
         this.inventoryTitle = page.locator('.app_logo')
         this.productTitle = page.locator('span.title')
+        this.productContainer = page.locator('.inventory_list')
         this.productColumn = page.locator('.inventory_list .inventory_item')
         this.twitterIcon = page.locator("[href*='twitter']")
         this.fbIcon = page.locator("[href*='facebook']")
         this.linkedinIcon = page.locator("[href*='linkedin']")
         this.copyRightLabel = page.locator('.footer_copy')
         this.productContents = this.productColumn
+        this.firstProduct = this.productContents.first().locator('.btn_inventory')
 
     }
 
@@ -94,9 +98,8 @@ class InventoryPage {
     }
 
     async removeToCart(){
-        await this.removeToCartBtn.click()
-        await this.page.waitForTimeout(3000)
-
+        await this.firstProduct.click()
+        expect(await this.firstProduct.textContent()).toEqual('Add to cart')
     }
 
     async selectItem(){
@@ -172,7 +175,7 @@ class InventoryPage {
         await expect(this.cartIcon).toBeVisible()
         await expect(this.productTitle).toContainText('Products')
         await expect(this.sort).toBeVisible()
-        await expect(this.productColumn).toBeVisible()
+        await expect(this.productContainer).toBeVisible()
         await expect(this.twitterIcon).toBeVisible()
         await expect(this.fbIcon).toBeVisible()
         await expect(this.linkedinIcon).toBeVisible()
@@ -200,7 +203,7 @@ class InventoryPage {
     }
 
     async verifyRemoveToCartBtn(){
-        const buttonText = await this.productContents.nth(1).locator('.btn_inventory').textContent()
+        const buttonText = await this.firstProduct.textContent()
 
         expect(buttonText).toEqual('Remove')
     }

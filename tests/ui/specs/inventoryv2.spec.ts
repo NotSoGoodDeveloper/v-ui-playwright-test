@@ -52,7 +52,7 @@ test.describe('Inventory', async() => {
     
     })
 
-    await test.step('And: I click the Add to Cart button', async() => {
+    await test.step('When: I click the Add to Cart button', async() => {
       await inventoryPage.addToCart(productCount)
     
     })
@@ -62,7 +62,7 @@ test.describe('Inventory', async() => {
     
     })
 
-    await test.step('And: the cart icon should have a red badge with the correct number of product/s that has been added', async() => {
+    await test.step('Then: the cart icon should have a red badge with the correct number of product/s that has been added', async() => {
       await inventoryPage.verifyCartNumber(productCount)
     
     })
@@ -71,11 +71,21 @@ test.describe('Inventory', async() => {
 
 
   test('Product/s can be removed to cart @smoke', async() => {
+    await test.step('Given: I add a product to cart', async() => {
+      await inventoryPage.addToCart(2)
+    })
 
+    await test.step('When: I click Remove on some product/s', async() => {
+      await inventoryPage.removeToCart()
+    })
+
+    await test.step(`And: the cart icon with the red badge number decreases
+                    Then: reflect the correct number of product/s`, async() => {
+      await inventoryPage.verifyCartNumber(1)
+    })
   })
 
-  test('Product list could be sorted correctly @smoke', async() => {
-
+  test('Product list could be sorted correctly', async() => {
 
   })
 
