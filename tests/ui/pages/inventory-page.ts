@@ -76,8 +76,6 @@ class InventoryPage {
             await this.productContents.nth(index).locator('.btn_inventory').click()
         }
 
-        await this.page.pause()
-
     }
 
     async chooseNumberOfProduct(){
@@ -198,6 +196,20 @@ class InventoryPage {
         }
 
         expect(JSON.stringify(productArr)).toEqual(JSON.stringify(productResponse))
+
+    }
+
+    async verifyRemoveToCartBtn(){
+        const buttonText = await this.productContents.nth(1).locator('.btn_inventory').textContent()
+
+        expect(buttonText).toEqual('Remove')
+    }
+
+    async verifyCartNumber(count: number = 1){
+
+        const cartNum = await this.cartIcon.textContent()
+
+        expect(count.toString()).toEqual(cartNum)
 
     }
 }
