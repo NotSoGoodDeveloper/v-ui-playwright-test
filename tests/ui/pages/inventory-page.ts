@@ -19,6 +19,15 @@ class InventoryPage {
     readonly finishBtn: Locator;
     readonly checkoutCompletedHeader: Locator;
     readonly backHomeBtn: Locator
+    readonly kebabOption: Locator;
+    readonly inventoryTitle: Locator;
+    readonly productTitle: Locator;
+    readonly productColumn: Locator
+    readonly twitterIcon: Locator
+    readonly fbIcon: Locator
+    readonly linkedinIcon: Locator
+    readonly copyRightLabel: Locator
+
 
     constructor(page: Page) {
         this.page = page
@@ -37,6 +46,14 @@ class InventoryPage {
         this.finishBtn = page.locator('#finish')
         this.checkoutCompletedHeader = page.locator('complete-header')
         this.backHomeBtn = page.getByRole('button', { name: 'Back Home' })
+        this.kebabOption = page.locator('#react-burger-menu-btn')
+        this.inventoryTitle = page.locator('.app_logo')
+        this.productTitle = page.locator('span.title')
+        this.productColumn = page.locator('.inventory_list')
+        this.twitterIcon = page.locator("[href*='twitter']")
+        this.fbIcon = page.locator("[href*='facebook']")
+        this.linkedinIcon = page.locator("[href*='linkedin']")
+        this.copyRightLabel = page.locator('.footer_copy')
     }
     
     async selectSortOption(sortOption: string) {
@@ -51,7 +68,7 @@ class InventoryPage {
 
     async validateCartBadge(shouldShow: boolean){
         if(shouldShow){
-            await this.cartBadge.isVisible()
+            await expect(this.cartBadge).toBeVisible()
         }else{
             await expect(this.cartBadge).toBeHidden();
         }
@@ -128,6 +145,19 @@ class InventoryPage {
         await expect(this.page.getByText('Your order has been dispatched, and will arrive just as fast as the pony can get there!')).toBeVisible()
         await this.backHomeBtn.click()
         await this.page.waitForTimeout(3000)
+    }
+
+    async verifyInventoryPageElements(){
+        await expect(this.kebabOption).toBeVisible()
+        await expect(this.inventoryTitle).toContainText('Swag Labs')
+        await expect(this.cartIcon).toBeVisible()
+        await expect(this.productTitle).toContainText('Products')
+        await expect(this.sort).toBeVisible()
+        await expect(this.productColumn).toBeVisible()
+        await expect(this.twitterIcon).toBeVisible()
+        await expect(this.fbIcon).toBeVisible()
+        await expect(this.linkedinIcon).toBeVisible()
+        await expect(this.copyRightLabel).toContainText('© 2024 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy')
     }
 }
 
