@@ -37,11 +37,11 @@ test.describe('Inventory', async() => {
     })
 
     await test.step('When: I see the list of available product cards in two column layout @smoke', async() =>{
-
+      expect(await inventoryPage.verifyInventoryPageElements()).toBeTruthy()
     })
 
     await test.step('Then: I should see their <name>, <descriptions>, <images>, <prices> and Add to Cart button next to EACH product @smoke', async() =>{
-
+      await inventoryPage.verifyProductDetails()
     })
   })
 

@@ -1,6 +1,7 @@
 import { type Page, type Locator , expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
-
+import {ProductObj} from '../../models/ProductObj'
+import productResponse from '../../data/products.json'
 class InventoryPage {
 
     readonly page: Page;
@@ -158,6 +159,28 @@ class InventoryPage {
         await expect(this.fbIcon).toBeVisible()
         await expect(this.linkedinIcon).toBeVisible()
         await expect(this.copyRightLabel).toContainText('© 2024 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy')
+
+        return true
+    }
+
+    async verifyProductDetails(){
+        const productContents = await this.page.locator('.inventory_list .inventory_item')
+        const count = await productContents.count();
+        const productArr: ProductObj[] = []
+        
+
+        for(let index = 0 ; index < count ;index++){
+            let productObj: ProductObj = {
+                name: await productContents.nth(index).locator('.inventory_item_name').textContent(),
+                description: await productContents.nth(index).locator('.inventory_item_desc').textContent(),
+                price: await productContents.nth(index).locator('.inventory_item_price').textContent()
+            }
+
+            productArr.push(productObj)
+        }
+
+        expect(JSON.stringify(productArr)).toEqual(JSON.stringify(productResponse))
+
     }
 }
 
