@@ -32,12 +32,14 @@ class InventoryPage {
     readonly firstProduct: Locator
     readonly productContainer: Locator
     readonly sortOptions: Locator
+    readonly productCard: Locator
+    readonly backToProductsBtn: Locator
 
 
     constructor(page: Page) {
         this.page = page
-        this.addToCartBtn = page.locator('#add-to-cart-sauce-labs-backpack')
-        this.cartBadge = page.locator('shopping_cart_badge')
+        this.addToCartBtn = page.locator('.btn_inventory')
+        this.cartBadge = page.locator('.shopping_cart_badge')
         this.sort = page.locator('select.product_sort_container')
         this.removeToCartBtn = page.locator('#remove-sauce-labs-backpack')
         this.selectItemLink = page.locator('#item_4_title_link')
@@ -62,6 +64,8 @@ class InventoryPage {
         this.copyRightLabel = page.locator('.footer_copy')
         this.productContents = this.productColumn
         this.firstProduct = this.productContents.first().locator('.btn_inventory')
+        this.productCard = page.locator('.inventory_details_container')
+        this.backToProductsBtn = page.locator('#back-to-products')
 
     }
 
@@ -145,10 +149,14 @@ class InventoryPage {
             console.log('Sort option does not exist')
         }
     }
-    async addToCart(count: number = 1){
+    async addToCart(count: number = 1, frmInventoryItem = false){
 
-        for(let index = 0 ; index < count ;index++){
-            await this.productContents.nth(index).locator('.btn_inventory').click()
+        if(frmInventoryItem == true){
+            await this.addToCartBtn.click()
+        } else {
+            for(let index = 0 ; index < count ;index++){
+                await this.productContents.nth(index).locator(this.addToCartBtn).click()
+            }
         }
 
     }
@@ -168,9 +176,14 @@ class InventoryPage {
         }
     }
 
-    async removeToCart(){
-        await this.firstProduct.click()
-        expect(await this.firstProduct.textContent()).toEqual('Add to cart')
+    async removeToCart(frmInventoryItem = false){
+        if(frmInventoryItem == true){
+            await this.addToCartBtn.click()
+            expect(await this.addToCartBtn.textContent()).toEqual('Add to cart')
+        } else{
+            await this.firstProduct.click()
+            expect(await this.firstProduct.textContent()).toEqual('Add to cart')
+        }
     }
 
     async selectItem(){
@@ -255,14 +268,36 @@ class InventoryPage {
         return true
     }
 
-    async getProductDetails(){
+    async verifyInventoryItemPageElements(){
+        await expect(this.kebabOption).toBeVisible()
+        await expect(this.inventoryTitle).toContainText('Swag Labs')
+        await expect(this.cartIcon).toBeVisible()
+        await expect(this.backToProductsBtn).toBeVisible()
+        await expect(this.productCard).toBeVisible()
+        await expect(this.twitterIcon).toBeVisible()
+        await expect(this.fbIcon).toBeVisible()
+        await expect(this.linkedinIcon).toBeVisible()
+        await expect(this.copyRightLabel).toContainText('© 2024 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy')
+    }
+
+    async getProductDetails(specific = false){
         const productArr: ProductObj[] = []
         
-        for(let index = 0 ; index < await this.getProductCount() ;index++){
+        if(specific == false){
+            for(let index = 0 ; index < await this.getProductCount() ;index++){
+                let productObj: ProductObj = {
+                    name: await this.productContents.nth(index).locator('.inventory_item_name').textContent(),
+                    description: await this.productContents.nth(index).locator('.inventory_item_desc').textContent(),
+                    price: await this.productContents.nth(index).locator('.inventory_item_price').textContent()
+                }
+    
+                productArr.push(productObj)
+            }
+        } else {
             let productObj: ProductObj = {
-                name: await this.productContents.nth(index).locator('.inventory_item_name').textContent(),
-                description: await this.productContents.nth(index).locator('.inventory_item_desc').textContent(),
-                price: await this.productContents.nth(index).locator('.inventory_item_price').textContent()
+                name: await this.productContents.nth(1).locator('.inventory_item_name').textContent(),
+                description: await this.productContents.nth(1).locator('.inventory_item_desc').textContent(),
+                price: await this.productContents.nth(1).locator('.inventory_item_price').textContent()
             }
 
             productArr.push(productObj)
@@ -271,23 +306,53 @@ class InventoryPage {
         return productArr
     }
 
-    async verifyProductDetails(){
-        const productArr = await this.getProductDetails()
-        expect(JSON.stringify(productArr)).toEqual(JSON.stringify(productResponse))
+    async clickFirstProduct(){
+        await this.productContents.nth(0).locator('#item_4_img_link').click()
 
     }
 
-    async verifyRemoveToCartBtn(){
-        const buttonText = await this.firstProduct.textContent()
+    async getProductDetailsfromInventoryItemPage(){
+        let product = [{
+            name: await this.page.locator('.inventory_details_container .inventory_details_name').textContent(),
+            description: await this.page.locator('.inventory_details_container .inventory_details_desc').textContent(),
+            price: await this.page.locator('.inventory_details_container .inventory_details_price').textContent()
+        }]
 
-        expect(buttonText).toEqual('Remove')
+        return product
+
     }
 
-    async verifyCartNumber(count: number = 1){
+    async verifyProductDetails(productDetails = null){
+        if(productDetails){
+            const productArr = await this.getProductDetailsfromInventoryItemPage()
+            expect(JSON.stringify(productArr)).toEqual(JSON.stringify(await this.getProductDetailsfromInventoryItemPage()))
 
-        const cartNum = await this.cartIcon.textContent()
+        } else {
+            const productArr = await this.getProductDetails()
+            expect(JSON.stringify(productArr)).toEqual(JSON.stringify(productResponse))
+        }
 
-        expect(count.toString()).toEqual(cartNum)
+    }
+
+    async verifyRemoveToCartBtn(frmInventoryItem = false){
+        if(frmInventoryItem == true){
+            const buttonText = await this.addToCartBtn.textContent()
+            expect(buttonText).toEqual('Remove')
+        } 
+        else{
+            const buttonText = await this.firstProduct.textContent()
+
+            expect(buttonText).toEqual('Remove')
+        }
+    }
+
+    async verifyCartNumber(count: number = 1, frmInventoryItem = false){
+        if(frmInventoryItem == true){
+            await expect(this.cartBadge).toBeHidden();
+        }else {
+            const cartNum = await this.cartIcon.textContent()
+            expect(count.toString()).toEqual(cartNum)
+        }
 
     }
 }

@@ -45,6 +45,58 @@ test.describe('Inventory', async() => {
     })
   })
 
+  test('Product can be viewed specifically and can be added and remove to cart @smoke', async({page}) =>{
+    let productDetails
+    await test.step('Given: I choose a Product', async() =>{
+      productDetails = await inventoryPage.getProductDetails(true)
+    })
+
+    await test.step('And: I click the Product', async() =>{
+      await inventoryPage.clickFirstProduct()
+    })
+
+    await test.step(`And: I see the product's inventory item page elements #inventoryItemPageElements
+    - Kebab option 
+    - Swag Labs label
+    - cart icon
+    - Back to Products label
+    - Product card container
+    - twitter icon
+    - facebook icon 
+    - linkedin icon
+    - label for © 2024 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy` , async() =>{
+      await inventoryPage.verifyInventoryItemPageElements()
+    })
+
+    await test.step('And: I see correct Product Details <name>, <description> and <price>', async() =>{
+      await inventoryPage.verifyProductDetails(productDetails)
+    })
+
+    await test.step('When: I click Add to cart button', async() =>{
+      await inventoryPage.addToCart(0, true)
+    })
+
+    await test.step('And: the button text turned to Remove from Add to cart text', async() =>{
+      await inventoryPage.verifyRemoveToCartBtn(true)
+    })
+
+    await test.step('Then: the cart icon should have a red badge with the correct number of product that has been added', async() =>{
+      await inventoryPage.verifyCartNumber()
+
+    })
+    
+    await test.step(`When: I click Remove on the selected product
+                    And: the button text turned to Add to cart from Remove text`, async() => {
+      await inventoryPage.removeToCart(true)
+    })
+
+    await test.step(`Then: the cart icon with the red badge number decreases
+                    And: reflect the correct number of product/s`, async() => {
+      await inventoryPage.verifyCartNumber(0, true)
+
+    })
+  })
+
   test('Product/s can be added to cart @smoke', async() => {
     let productCount: number
     await test.step('Given: I choose {number} of product', async() => {
@@ -75,7 +127,8 @@ test.describe('Inventory', async() => {
       await inventoryPage.addToCart(2)
     })
 
-    await test.step('When: I click Remove on some product/s', async() => {
+    await test.step(`When: I click Remove on some product/s
+                    And: the button text turned to Add to cart from Remove text`, async() => {
       await inventoryPage.removeToCart()
     })
 
