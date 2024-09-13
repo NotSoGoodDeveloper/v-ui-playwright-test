@@ -158,6 +158,8 @@ class InventoryPage {
             }
         }
 
+        return await this.getProductDetails('custom',count)
+
     }
 
     async chooseNumberOfProduct(){
@@ -281,10 +283,10 @@ class InventoryPage {
         await expect(this.copyRightLabel).toContainText('© 2024 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy')
     }
 
-    async getProductDetails(specific = false){
+    async getProductDetails(productNum = 'all', count = 1){
         const productArr: ProductObj[] = []
         
-        if(specific == false){
+        if(productNum == 'all'){
             for(let index = 0 ; index < await this.getProductCount() ;index++){
                 let productObj: ProductObj = {
                     name: await this.productContents.nth(index).locator('.inventory_item_name').textContent(),
@@ -294,7 +296,7 @@ class InventoryPage {
     
                 productArr.push(productObj)
             }
-        } else {
+        } else if(productNum == 'one'){
             let productObj: ProductObj = {
                 name: await this.productContents.nth(1).locator('.inventory_item_name').textContent(),
                 description: await this.productContents.nth(1).locator('.inventory_item_desc').textContent(),
@@ -302,6 +304,16 @@ class InventoryPage {
             }
 
             productArr.push(productObj)
+        } else if(productNum == 'custom'){
+            for(let index = 0 ; index < count ;index++){
+                let productObj: ProductObj = {
+                    name: await this.productContents.nth(index).locator('.inventory_item_name').textContent(),
+                    description: await this.productContents.nth(index).locator('.inventory_item_desc').textContent(),
+                    price: await this.productContents.nth(index).locator('.inventory_item_price').textContent()
+                }
+    
+                productArr.push(productObj)
+            }
         }
 
         return productArr

@@ -22,10 +22,12 @@ test.beforeEach(async({page}) => {
 test.describe('Cart', async() => {
 
   test('Products should be viewed in the cart with correct details @smoke', async()=>{
+    let productCount: number
+    let productAdded
+
     await test.step('Given: Products already added', async()=>{
-      let productCount: number
       productCount = await inventoryPage.chooseNumberOfProduct()  
-      await inventoryPage.addToCart(productCount)
+      productAdded = await inventoryPage.addToCart(productCount)
       await inventoryPage.verifyRemoveToCartBtn()
       await inventoryPage.verifyCartNumber(productCount)
     })
@@ -58,6 +60,7 @@ test.describe('Cart', async() => {
     })
 
     await test.step('Then: I should see correct product details <name>, <description>, <price>', async()=>{
+      await cartPage.verifyCartProducts(productAdded)
 
     })
 

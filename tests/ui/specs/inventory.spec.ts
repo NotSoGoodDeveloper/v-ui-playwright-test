@@ -107,7 +107,7 @@ test.describe('Inventory', async() => {
   test('Product can be viewed specifically and can be added and remove to cart @smoke', async({page}) =>{
     let productDetails
     await test.step('Given: I choose a Product', async() =>{
-      productDetails = await inventoryPage.getProductDetails(true)
+      productDetails = await inventoryPage.getProductDetails('one')
     })
 
     await test.step('And: I click the Product', async() =>{
