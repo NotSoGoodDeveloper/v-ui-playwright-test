@@ -9,7 +9,8 @@
     "test:ui:regression": "npx playwright test tests/ui/specs --project=chromium --headed --retries=1 --reporter=list",
     "test:smoke": "npx playwright test --grep @smoke",
     "test:debug": "npx playwright test --debug",
-    "ui:console": "npx playwright test --ui"
+    "ui:console": "npx playwright test --ui",
+    "test:smoke:allure": "npx playwright test --grep @smoke --reporter=line,allure-playwright && allure generate ./allure-results --clean && allure open ./allure-report"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +20,8 @@
     "@playwright/test": "^1.41.1",
     "@types/node": "^20.11.10",
     "dotenv": "^16.1.4"
+  },
+  "dependencies": {
+    "allure-playwright": "^3.0.0-beta.12"
   }
 }
