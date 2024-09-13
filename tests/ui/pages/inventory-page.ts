@@ -120,7 +120,6 @@ class InventoryPage {
 
         else if(sortOption == 'Price (low to high)'){
             const productDetails = await this.getProductDetails();
-            console.log("JSON.stringify(productDetails):: ",JSON.stringify(productDetails))
             const productArr = productOriginalState.sort((item1, item2) => {
                 const price1 = parseFloat(item1.price.replace('$', ''));
                 const price2 = parseFloat(item2.price.replace('$', ''));
@@ -209,6 +208,8 @@ class InventoryPage {
             var pageUrl = /.*checkout-step-two/;
         }else if(url == 'checkout-complete'){
             var pageUrl = /.*checkout-complete/;
+        }else if(url == 'cart'){
+            var pageUrl = /.*cart/;
         }
 
         await expect(this.page).toHaveURL(pageUrl);
