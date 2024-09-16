@@ -7,6 +7,11 @@ class CartPage extends InventoryPage{
     readonly quantityLabel: Locator
     readonly cartList: Locator
     readonly continueCheckoutBtn: Locator
+    readonly checkOutInfoLabel: Locator
+    readonly checkOutInfoContainer: Locator
+    readonly cancelCheckout: Locator
+    readonly continueCheckout: Locator
+    readonly checkoutBtn: Locator
 
     constructor(page: Page) {
         super(page);
@@ -14,6 +19,11 @@ class CartPage extends InventoryPage{
         this.quantityLabel = this.page.locator('.cart_quantity_label')
         this.cartList = this.page.locator('.cart_list')
         this.continueCheckoutBtn = this.page.locator('.back')
+        this.checkOutInfoLabel = this.page.locator('.header_secondary_container')
+        this.checkOutInfoContainer = this.page.locator('.checkout_info')
+        this.cancelCheckout = this.page.locator('.cart_cancel_link')
+        this.continueCheckout = this.page.locator('.submit-button')
+        this.checkoutBtn = this.page.locator('.checkout_button')
     }
 
     async clickShoppingCart(){
@@ -55,6 +65,24 @@ class CartPage extends InventoryPage{
 
         await expect(JSON.stringify(productAdded)).toEqual(JSON.stringify(await this.getProductDetailsfrmCart()))
 
+    }
+
+    async verifyCheckoutStepOnePageElements(){
+        await expect(this.kebabOption).toBeVisible()
+        await expect(this.inventoryTitle).toContainText('Swag Labs')
+        await expect(this.cartIcon).toBeVisible()
+        await expect(this.checkOutInfoLabel).toContainText('Checkout: Your Information')
+        await expect(this.checkOutInfoContainer).toBeVisible()
+        await expect(this.cancelCheckout).toBeVisible()
+        await expect(this.continueCheckout).toBeVisible()
+        await expect(this.twitterIcon).toBeVisible()
+        await expect(this.fbIcon).toBeVisible()
+        await expect(this.linkedinIcon).toBeVisible()
+        await expect(this.copyRightLabel).toContainText('© 2024 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy')
+    }
+
+    async clickCheckoutButton(){
+        await this.checkoutBtn.click()
     }
     
 }

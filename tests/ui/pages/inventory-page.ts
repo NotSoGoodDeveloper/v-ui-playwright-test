@@ -34,6 +34,7 @@ class InventoryPage {
     readonly sortOptions: Locator
     readonly productCard: Locator
     readonly backToProductsBtn: Locator
+    readonly removeBtnFrmCart: Locator
 
 
     constructor(page: Page) {
@@ -66,6 +67,7 @@ class InventoryPage {
         this.firstProduct = this.productContents.first().locator('.btn_inventory')
         this.productCard = page.locator('.inventory_details_container')
         this.backToProductsBtn = page.locator('#back-to-products')
+        this.removeBtnFrmCart = page.locator('#cart_button').first()
 
     }
 
@@ -212,6 +214,9 @@ class InventoryPage {
             var pageUrl = /.*checkout-complete/;
         }else if(url == 'cart'){
             var pageUrl = /.*cart/;
+        }else if(url == 'checkout-step-one'){
+            var pageUrl = /.*checkout-step-one/;
+
         }
 
         await expect(this.page).toHaveURL(pageUrl);
@@ -347,13 +352,18 @@ class InventoryPage {
 
     }
 
-    async verifyRemoveToCartBtn(frmInventoryItem = false){
-        if(frmInventoryItem == true){
+    async verifyRemoveToCartBtn(productLocation = 'inventory'){
+        if(productLocation == 'inventory-item'){
             const buttonText = await this.addToCartBtn.textContent()
             expect(buttonText).toEqual('Remove')
         } 
-        else{
+        else if(productLocation == 'inventory'){
             const buttonText = await this.firstProduct.textContent()
+
+            expect(buttonText).toEqual('Remove')
+        }
+        else if(productLocation == 'cart'){
+            const buttonText = await this.removeBtnFrmCart.textContent()
 
             expect(buttonText).toEqual('Remove')
         }

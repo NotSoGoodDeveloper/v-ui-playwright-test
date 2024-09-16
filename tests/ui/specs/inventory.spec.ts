@@ -140,7 +140,7 @@ test.describe('Inventory', async() => {
     })
 
     await test.step('And: the button text turned to Remove from Add to cart text', async() =>{
-      await inventoryPage.verifyRemoveToCartBtn(true)
+      await inventoryPage.verifyRemoveToCartBtn('inventory-item')
     })
 
     await test.step('Then: the cart icon should have a red badge with the correct number of product that has been added', async() =>{
