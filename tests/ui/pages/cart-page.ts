@@ -2,6 +2,7 @@ import { type Page, type Locator , expect } from '@playwright/test';
 import InventoryPage from './inventory-page';
 import {ProductObj} from '../../models/ProductObj'
 import {faker} from '@faker-js/faker'
+import shippingInfoJson from '../../data/shippingInfo.json';
 
 class CartPage extends InventoryPage{
     readonly secondaryHeader: Locator
@@ -136,7 +137,7 @@ class CartPage extends InventoryPage{
         await this.continueBtn.click()
     }
     
-    async verifySummaryInfo(){
+    async verifySummaryInfo(productAdded){
         const paymentInfo = await this.summarySection.locator('.summary_value_label').first().textContent()
         const shippingInfo = await this.summarySection.locator('.summary_value_label').nth(1).textContent()
         const itemTotal = await this.itemTotal.textContent() as string
@@ -147,16 +148,29 @@ class CartPage extends InventoryPage{
         const taxValue = tax.split(' ')[1].replace('$','')
         const totalWithTaxVal = totalWithTax.split(' ')[1].replace('$','')
 
-        console.log('paymentInfo: ',paymentInfo)
-        console.log('shippingInfo: ',shippingInfo)
+        const itemTotalfrmAddedProduct = productAdded.map(item =>{
+            return parseFloat(item.price.replace('$',''))
+        })
 
-        
-        console.log('itemTotal: ',itemTotalValue)
-        console.log('tax: ',taxValue)
-        console.log('totalWithTax: ',totalWithTaxVal)
+        const totalPriceBeforeTax = itemTotalfrmAddedProduct.reduce((accumulator, currentValue) =>{
+            return accumulator + currentValue
+        },0)
 
+        const taxValuePerPrice = itemTotalfrmAddedProduct.map(item =>{
+            return item * 0.08
+        })
 
+        const totalTaxValuePerPrice = taxValuePerPrice.reduce((accumulator, currentValue) =>{
+            return accumulator + currentValue
+        })
 
+        const totalPriceAfterTax = totalTaxValuePerPrice + totalPriceBeforeTax
+
+        await expect(paymentInfo).toEqual(shippingInfoJson.paymentInfo)
+        await expect(shippingInfo).toEqual(shippingInfoJson.shippingInfo)
+        await expect(parseFloat(itemTotalValue).toFixed(2)).toEqual(parseFloat(totalPriceBeforeTax).toFixed(2))
+        await expect(parseFloat(taxValue).toFixed(2)).toEqual(parseFloat(totalTaxValuePerPrice).toFixed(2))
+        await expect(parseFloat(totalWithTaxVal).toFixed(2)).toEqual(parseFloat(totalPriceAfterTax).toFixed(2))
     }
 }
 

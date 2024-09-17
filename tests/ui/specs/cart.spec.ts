@@ -172,7 +172,7 @@ test.describe('Cart', async() => {
     })
 
     await test.step('And: I see correct Summary info <paymentInfo>, <shippingInfo>, <priceTotal>, <tax>, <total (including tax)>', async()=>{
-      await cartPage.verifySummaryInfo()
+      await cartPage.verifySummaryInfo(productAdded)
     })
 
 
