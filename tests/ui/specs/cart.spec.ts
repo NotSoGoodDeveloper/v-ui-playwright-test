@@ -112,6 +112,66 @@ test.describe('Cart', async() => {
   })
 
   test('Products can be checkout @smoke', async()=>{
+    await test.step('Given: Products already added', async()=>{
+      await inventoryPage.verifyRemoveToCartBtn()
+      await inventoryPage.verifyCartNumber(productCount)
+    })
+    await test.step('And: I click shopping cart icon', async()=>{
+      await cartPage.clickShoppingCart()
+
+    })
+
+    await test.step('And: I redirected to cart page', async()=>{
+      await inventoryPage.validateURL('cart');
+    })
+
+    await test.step('And: I see correct product details <name>, <description>, <price>', async()=>{
+      await cartPage.verifyCartProducts(productAdded)
+
+    })
+
+    await test.step('And: I click checkout button', async()=>{
+      await cartPage.clickCheckoutButton()
+
+    })
+
+    await test.step('And: I redirected to checkout step one page', async()=>{
+      await cartPage.validateURL('checkout-step-one')
+
+    })
+
+    await test.step('And: I input <firstname>, <lastname>, and <zip>', async()=>{
+      await cartPage.inputCheckoutDetails()
+    })
+
+    await test.step('When: I click Continue button', async()=>{
+      await cartPage.clickContinueButton()
+    })
+
+    await test.step(`Then: I should see checkout step two elements #checkoutStepTwoPageElements
+    - Kebab option 
+    - Swag Labs label
+    - cart icon
+    - Checkout: Overview label
+    - QTY label
+    - Description label
+    - Checkout details container
+    - Summary Section
+    - Cancel button
+    - Finish  button
+    - twitter icon
+    - facebook icon 
+    - linkedin icon
+    - label for © 2024 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy`, async()=>{
+      await cartPage.verifyCheckoutStepTwoPageElements()
+    })
+
+    await test.step('And: I see correct Product details <name>, <description>, <price>', async()=>{
+    })
+
+    await test.step('And: I see correct Summary info <paymentInfo>, <shippingInfo>, <priceTotal>', async()=>{
+    })
+
 
   })
 
