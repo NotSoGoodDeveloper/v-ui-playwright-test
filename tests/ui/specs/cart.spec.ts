@@ -111,7 +111,7 @@ test.describe('Cart', async() => {
     })
   })
 
-  test('Products can be checkout @smoke', async()=>{
+  test.only('Products can be checkout @smoke', async()=>{
     await test.step('Given: Products already added', async()=>{
       await inventoryPage.verifyRemoveToCartBtn()
       await inventoryPage.verifyCartNumber(productCount)
@@ -167,6 +167,8 @@ test.describe('Cart', async() => {
     })
 
     await test.step('And: I see correct Product details <name>, <description>, <price>', async()=>{
+      await cartPage.verifyCartProducts(productAdded)
+
     })
 
     await test.step('And: I see correct Summary info <paymentInfo>, <shippingInfo>, <priceTotal>', async()=>{

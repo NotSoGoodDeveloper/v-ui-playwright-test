@@ -28,10 +28,10 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    launchOptions: {
-      // 1
-      args: ["--start-fullscreen"]
-    }
+    // launchOptions: {
+    //   1
+    //   args: ["--start-fullscreen"]
+    // }
   },
   timeout: 50 * 1000,
   expect: {
@@ -48,8 +48,8 @@ export default defineConfig({
       screenshot : 'on',
       video:'retain-on-failure',
       trace : 'retain-on-failure',//off,on,
-      viewport: null,
-      deviceScaleFactor: undefined
+      // viewport: null,
+      // deviceScaleFactor: undefined
     
        },
     },
