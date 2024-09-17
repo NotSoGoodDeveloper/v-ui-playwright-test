@@ -19,6 +19,9 @@ class CartPage extends InventoryPage{
     readonly descriptionLabel: Locator
     readonly finishBtn: Locator
     readonly summarySection: Locator
+    readonly itemTotal: Locator
+    readonly taxInfo: Locator
+    readonly totalWithTax: Locator
 
     constructor(page: Page) {
         super(page);
@@ -37,6 +40,9 @@ class CartPage extends InventoryPage{
         this.descriptionLabel = this.page.locator('.cart_desc_label')
         this.finishBtn = this.page.locator('#finish')
         this.summarySection = this.page.locator('.summary_info')
+        this.itemTotal = this.page.locator('.summary_subtotal_label')
+        this.taxInfo = this.page.locator('.summary_tax_label')
+        this.totalWithTax = this.page.locator('.summary_total_label')
     }
 
     async clickShoppingCart(){
@@ -130,6 +136,28 @@ class CartPage extends InventoryPage{
         await this.continueBtn.click()
     }
     
+    async verifySummaryInfo(){
+        const paymentInfo = await this.summarySection.locator('.summary_value_label').first().textContent()
+        const shippingInfo = await this.summarySection.locator('.summary_value_label').nth(1).textContent()
+        const itemTotal = await this.itemTotal.textContent() as string
+        const tax = await this.taxInfo.textContent() as string
+        const totalWithTax = await this.totalWithTax.textContent() as string
+
+        const itemTotalValue = itemTotal.split(' ')[2].replace('$', '')
+        const taxValue = tax.split(' ')[1].replace('$','')
+        const totalWithTaxVal = totalWithTax.split(' ')[1].replace('$','')
+
+        console.log('paymentInfo: ',paymentInfo)
+        console.log('shippingInfo: ',shippingInfo)
+
+        
+        console.log('itemTotal: ',itemTotalValue)
+        console.log('tax: ',taxValue)
+        console.log('totalWithTax: ',totalWithTaxVal)
+
+
+
+    }
 }
 
 export default CartPage;
