@@ -144,11 +144,11 @@ test.describe('Cart', async() => {
       await cartPage.inputCheckoutDetails()
     })
 
-    await test.step('When: I click Continue button', async()=>{
+    await test.step('And: I click Continue button', async()=>{
       await cartPage.clickContinueButton()
     })
 
-    await test.step(`Then: I should see checkout step two elements #checkoutStepTwoPageElements
+    await test.step(`And: I see checkout step two elements #checkoutStepTwoPageElements
     - Kebab option 
     - Swag Labs label
     - cart icon
@@ -175,6 +175,26 @@ test.describe('Cart', async() => {
       await cartPage.verifySummaryInfo(productAdded)
     })
 
+    await test.step('When: I click Finish button', async()=>{
+      await cartPage.clickFinishCheckoutBtn()
+    })
+
+    await test.step('Then: I should redirected to checkout complete page', async()=>{
+      await cartPage.validateURL('checkout-complete')
+    })
+
+    await test.step(`And: I see checkout step two elements #checkoutCompletePageElements
+    - Kebab option 
+    - Swag Labs label
+    - cart icon
+    - Checkout: Complete label
+    - Checkout complete container
+    - twitter icon
+    - facebook icon 
+    - linkedin icon
+    - label for © 2024 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy`, async()=>{
+    })
+    await cartPage.verifyCheckoutCompletedPageElements()
 
   })
 

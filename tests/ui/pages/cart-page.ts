@@ -18,11 +18,14 @@ class CartPage extends InventoryPage{
     readonly zip: Locator
     readonly continueBtn: Locator
     readonly descriptionLabel: Locator
-    readonly finishBtn: Locator
     readonly summarySection: Locator
     readonly itemTotal: Locator
     readonly taxInfo: Locator
     readonly totalWithTax: Locator
+    readonly checkIcon: Locator
+    readonly thankyouHeader:Locator
+    readonly completedOrderText: Locator
+    readonly backHomeBtn: Locator
 
     constructor(page: Page) {
         super(page);
@@ -39,11 +42,14 @@ class CartPage extends InventoryPage{
         this.zip = this.page.locator('#postal-code')
         this.continueBtn = this.page.getByRole('button', {name:'continue'})
         this.descriptionLabel = this.page.locator('.cart_desc_label')
-        this.finishBtn = this.page.locator('#finish')
         this.summarySection = this.page.locator('.summary_info')
         this.itemTotal = this.page.locator('.summary_subtotal_label')
         this.taxInfo = this.page.locator('.summary_tax_label')
         this.totalWithTax = this.page.locator('.summary_total_label')
+        this.checkIcon = this.page.locator('.pony_express')
+        this.thankyouHeader = this.page.locator('.complete-header')
+        this.completedOrderText = this.page.locator('.complete-text')
+        this.backHomeBtn = this.page.locator('#back-to-products')
     }
 
     async clickShoppingCart(){
@@ -171,6 +177,25 @@ class CartPage extends InventoryPage{
         await expect(parseFloat(itemTotalValue).toFixed(2)).toEqual(parseFloat(totalPriceBeforeTax).toFixed(2))
         await expect(parseFloat(taxValue).toFixed(2)).toEqual(parseFloat(totalTaxValuePerPrice).toFixed(2))
         await expect(parseFloat(totalWithTaxVal).toFixed(2)).toEqual(parseFloat(totalPriceAfterTax).toFixed(2))
+    }
+
+    async verifyCheckoutCompletedPageElements(){
+        await expect(this.kebabOption).toBeVisible()
+        await expect(this.inventoryTitle).toContainText('Swag Labs')
+        await expect(this.cartIcon).toBeVisible()
+        await expect(this.secondaryHeader).toContainText('Checkout: Complete')
+        await expect(this.checkIcon).toBeVisible()
+        await expect(this.thankyouHeader).toContainText('Thank you for your order!')
+        await expect(this.completedOrderText).toContainText('Your order has been dispatched, and will arrive just as fast as the pony can get there!')
+        await expect(this.backHomeBtn).toBeVisible()
+        await expect(this.twitterIcon).toBeVisible()
+        await expect(this.fbIcon).toBeVisible()
+        await expect(this.linkedinIcon).toBeVisible()
+        await expect(this.copyRightLabel).toContainText('© 2024 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy')
+    }
+
+    async clickFinishCheckoutBtn() {
+        await this.finishBtn.click()
     }
 }
 

@@ -249,11 +249,6 @@ class InventoryPage {
         await this.page.waitForTimeout(3000)
     }
 
-    async clickFinishCheckoutBtn() {
-        await this.finishBtn.click()
-        await this.page.waitForTimeout(3000)
-    }
-
     async validateCompletedPage(){
         await expect(this.page.getByText('Thank you for your order!')).toBeVisible()
         await expect(this.page.getByText('Your order has been dispatched, and will arrive just as fast as the pony can get there!')).toBeVisible()
