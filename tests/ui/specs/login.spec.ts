@@ -6,7 +6,7 @@ const envUtil = new ENV();
 
 let loginPage: LoginPage;
 
-test.use({ storageState: { cookies: [], origins: [] } }); // doesn't share the logged in session
+test.use({ storageState: { cookies: [], origins: [] } });
 
 test.beforeEach(async ({ page }) => {
   await page.goto(envUtil.getUrl());
