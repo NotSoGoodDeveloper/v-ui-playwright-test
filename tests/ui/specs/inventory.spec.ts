@@ -2,18 +2,14 @@ import { test, expect } from '@playwright/test';
 import LoginPage from '../pages/login-page';
 import InventoryPage from '../pages/inventory-page'
 
-const { ENV } = require("../../utils/setup/env");
-const envUtil = new ENV();
-
 let loginPage: LoginPage
 let inventoryPage: InventoryPage
 
 test.beforeEach(async({page}) => {
+  await page.goto('/inventory.html')
+  await page.waitForTimeout(1000)
   loginPage = new LoginPage(page);
   inventoryPage = new InventoryPage(page);
-  await page.goto(envUtil.getUrl());
-  await loginPage.login(envUtil.getValidUser(),envUtil.getPass())
-  await loginPage.validateLogin();
 })
 
 test.describe('Inventory', async() => {

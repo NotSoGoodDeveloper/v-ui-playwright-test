@@ -4,9 +4,6 @@ import InventoryPage from '../pages/inventory-page'
 import CartPage from '../pages/cart-page'
 import {ProductObj} from '../../models/ProductObj'
 
-const { ENV } = require("../../utils/setup/env");
-const envUtil = new ENV();
-
 let loginPage: LoginPage
 let inventoryPage: InventoryPage
 let cartPage: CartPage
@@ -14,12 +11,11 @@ let productCount: number
 let productAdded: ProductObj[]
 
 test.beforeEach(async({page}) => {
+  await page.goto('/inventory.html')
+  await page.waitForTimeout(1000)
   loginPage = new LoginPage(page);
   inventoryPage = new InventoryPage(page);
   cartPage = new CartPage(page);
-  await page.goto(envUtil.getUrl());
-  await loginPage.login(envUtil.getValidUser(),envUtil.getPass())
-  await loginPage.validateLogin();
   productCount = await inventoryPage.chooseNumberOfProduct()  
   productAdded = await inventoryPage.addToCart(productCount)
 })

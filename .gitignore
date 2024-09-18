@@ -6,3 +6,4 @@ node_modules/
 .env
 /allure-report
 /allure-results
+state.json
