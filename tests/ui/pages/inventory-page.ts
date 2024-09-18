@@ -201,24 +201,28 @@ class InventoryPage {
     }
 
     async validateURL(url: string){
-        var pageUrl: RegExp = /.*saucedemo/
-        if(url == 'inventory'){
-            var pageUrl = /.*inventory/;
-        }else if(url == 'inventory-item'){
-            var pageUrl = /.*inventory-item/;
-        }else if(url == 'checkout-step-one'){
-            var pageUrl = /.*checkout-step-one/;
-        }else if(url == 'checkout-step-two'){
-            var pageUrl = /.*checkout-step-two/;
-        }else if(url == 'checkout-complete'){
-            var pageUrl = /.*checkout-complete/;
-        }else if(url == 'cart'){
-            var pageUrl = /.*cart/;
-        }else if(url == 'checkout-step-one'){
-            var pageUrl = /.*checkout-step-one/;
+        let pageUrl: RegExp = /.*saucedemo/
+        switch(url){
+        case 'inventory':
+                pageUrl = /.*inventory/;
+            break;
+        case 'inventory-item':
+            pageUrl = /.*inventory-item/;
+            break;
+        case 'checkout-step-one':
+            pageUrl = /.*checkout-step-one/;
+            break;
+        case 'checkout-step-two':
+            pageUrl = /.*checkout-step-two/;
+            break;
+        case 'checkout-complete':
+            pageUrl = /.*checkout-complete/;
+            break;
+        case 'checkout-complete':
+            pageUrl = /.*checkout-complete/;
+            break;
 
         }
-
         await expect(this.page).toHaveURL(pageUrl);
 
     }
