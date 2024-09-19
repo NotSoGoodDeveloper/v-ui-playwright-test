@@ -302,9 +302,9 @@ class InventoryPage {
             }
         } else if(productNum == 'one'){
             let productObj: ProductObj = {
-                name: await this.productContents.nth(1).locator('.inventory_item_name').textContent(),
-                description: await this.productContents.nth(1).locator('.inventory_item_desc').textContent(),
-                price: await this.productContents.nth(1).locator('.inventory_item_price').textContent()
+                name: await this.productContents.nth(0).locator('.inventory_item_name').textContent(),
+                description: await this.productContents.nth(0).locator('.inventory_item_desc').textContent(),
+                price: await this.productContents.nth(0).locator('.inventory_item_price').textContent()
             }
 
             productArr.push(productObj)
@@ -342,7 +342,7 @@ class InventoryPage {
     async verifyProductDetails(productDetails = null){
         if(productDetails){
             const productArr = await this.getProductDetailsfromInventoryItemPage()
-            expect(JSON.stringify(productArr)).toEqual(JSON.stringify(await this.getProductDetailsfromInventoryItemPage()))
+            expect(JSON.stringify(productArr)).toEqual(JSON.stringify(productDetails))
 
         } else {
             const productArr = await this.getProductDetails()
